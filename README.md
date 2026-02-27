@@ -5,14 +5,14 @@ Este repositorio contiene una solución para la gestión de solicitudes de créd
 🛠️ Stack Tecnológico 
 
 Categoría	Tecnología	Razón Técnica
-Framework Base	Next.js Unifica Frontend y API en un solo despliegue, facilitando la gestión de rutas y seguridad.
-Lenguaje	TypeScript	Garantiza la integridad de los datos en transacciones financieras y validaciones de PII.
-Base de Datos	PostgreSQL 	Soporta JSONB para datos variables de bancos y funciones nativas/disparadores solicitados.
-ORM	Prisma	Proporciona un esquema tipado, manejo de migraciones profesional y abstracción de la base de datos.
-Gestión de Colas	BullMQ	Solución robusta en Node.js para procesamiento asíncrono persistente y distribuido.
-Caché	Redis	Almacenamiento en memoria para resultados de riesgo y catálogos, optimizando el rendimiento.
-Tiempo Real	Socket.io	Comunicación bidireccional para actualizar la interfaz ante cambios de estado.
-Seguridad	JWT / Bcrypt	Manejo seguro de PII y autenticación robusta evitando exponer datos sensibles.
+1.Framework Base	Next.js Unifica Frontend y API en un solo despliegue, facilitando la gestión de rutas y seguridad.
+2.Lenguaje	TypeScript	Garantiza la integridad de los datos en transacciones financieras y validaciones de PII.
+3.Base de Datos	PostgreSQL y funciones nativas/disparadores solicitados.
+4.ORM	Prisma	Proporciona un esquema tipado, manejo de migraciones  y abstracción de la base de datos.
+5.Gestión de Colas	BullMQ	 para procesamiento asíncrono persistente y distribuido.
+6.Caché	Redis	Almacenamiento en memoria para resultados de riesgo y catálogos, optimizando el rendimiento.
+7.Tiempo Real	Socket.io	Comunicación bidireccional para actualizar la interfaz ante cambios de estado.
+8.Seguridad	JWT / Bcrypt	Manejo seguro de PII y autenticación robusta evitando exponer datos sensibles.
 
 🚀 Instalación y Ejecución (Quick Start)
 
