@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "tab_request_pii" ALTER COLUMN "docType" SET DATA TYPE VARCHAR(255),
+ALTER COLUMN "phone" SET DATA TYPE VARCHAR(255);

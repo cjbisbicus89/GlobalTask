@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model CreditRequest {
+  id                  String           @id @default(uuid()) @db.Uuid
+  countryCode         String           @db.VarChar(2)
+  currentStatusId     Int
+  amount              Decimal          @db.Decimal(18, 2)
+  monthlyIncome       Decimal          @db.Decimal(18, 2)
+  currencyCode        String           @db.VarChar(3)
+  externalReferenceId String?          @db.VarChar(255)
+  requestedAt         DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  backgroundJobs      BackgroundJob[]
+  status              StatusCatalog    @relation(fields: [currentStatusId], references: [id])
+  realtimeEvents      RealtimeEvent[]
+  history             RequestHistory[]
+  piiData             RequestPII?
+
+  @@index([countryCode, currentStatusId])
+  @@index([requestedAt(sort: Desc)])
+  @@index([externalReferenceId])
+  @@map("tab_credit_requests")
+}
+
+model RequestPII {
+  idCredit      String        @id @db.Uuid
+  fullNameEnc   String
+  docType       String        @db.VarChar(255)
+  docNumberEnc  String
+  docNumberHash String        @db.VarChar(255)
+  email         String        @db.VarChar(255)
+  phone         String        @db.VarChar(255)
+  creditRequest CreditRequest @relation(fields: [idCredit], references: [id])
+
+  @@index([docNumberHash])
+  @@map("tab_request_pii")
+}
+
+model CountryRule {
+  idRule          Int      @id @default(autoincrement())
+  countryCode     String   @db.VarChar(2)
+  ruleName        String   @db.VarChar(255)
+  ruleValue       Decimal? @db.Decimal(18, 4)
+  operator        String?  @db.VarChar(10)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  description     String?
+  priority        Int      @default(1)
+  updatedAt       DateTime @updatedAt
+  validationRegex String?
+
+  @@index([countryCode, isActive])
+  @@map("tab_country_rules")
+}
+
+model BankProvider {
+  idProvider   Int    @id
+  countryCode  String @db.VarChar(2)
+  providerName String @db.VarChar(255)
+  apiConfig    Json
+
+  @@map("tab_bank_providers")
+}
+
+model BackgroundJob {
+  idJob         String        @id @default(uuid()) @db.Uuid
+  idCredit      String        @db.Uuid
+  jobType       String        @db.VarChar(100)
+  status        String        @default("PENDING")
+  attempts      Int           @default(0)
+  lockedAt      DateTime?
+  createdAt     DateTime      @default(now())
+  creditRequest CreditRequest @relation(fields: [idCredit], references: [id])
+
+  @@map("tab_background_jobs")
+}
+
+model WebhookInbox {
+  idWebhook       String    @id @default(uuid()) @db.Uuid
+  externalEventId String    @unique @db.VarChar(255)
+  payload         Json
+  processedAt     DateTime?
+
+  @@map("tab_webhook_inbox")
+}
+
+model StatusCatalog {
+  id              Int             @id
+  name            String          @db.VarChar(100)
+  userDescription String
+  creditRequests  CreditRequest[]
+  nameUser        String          @db.VarChar(100)
+  @@map("tab_status_catalog")
+}
+
+model RequestHistory {
+  idHistory     String        @id @default(uuid()) @db.Uuid
+  idCredit      String        @db.Uuid
+  fromStatusId  Int
+  toStatusId    Int
+  metadata      Json?
+  correlationId String        @db.Uuid
+  changedAt     DateTime      @default(now())
+  creditRequest CreditRequest @relation(fields: [idCredit], references: [id])
+
+  @@map("tab_request_history")
+}
+
+model RealtimeEvent {
+  idEvent       String        @id @default(uuid()) @db.Uuid
+  idCredit      String        @db.Uuid
+  eventType     String        @db.VarChar(100)
+  isConsumed    Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  creditRequest CreditRequest @relation(fields: [idCredit], references: [id])
+
+  @@map("tab_realtime_events")
+}
+
+model AuditLog {
+  idAudit   String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  action    String   @db.VarChar(255)
+  ipAddress String   @db.VarChar(45)
+  createdAt DateTime @default(now())
+
+  @@map("tab_audit_logs")
+}

@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: globaltask_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: globaltask_fintech
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: globaltask_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  api:
+    build: .
+    container_name: globaltask_api
+    restart: always
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres_password@db:5432/globaltask_fintech"
+      REDIS_URL: "redis://redis:6379"
+    command: npx tsx watch src/app.ts
+
+  frontend:
+    build: .
+    container_name: globaltask_frontend
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3000/api/v1
+    # Comando modificado para esperar y abrir navegador
+    command: >
+      sh -c "(sleep 8 && (open http://localhost:3001 || start http://localhost:3001 || xdg-open http://localhost:3001) &) 
+      && npx next dev -p 3001"
+
+  worker:
+    build: .
+    container_name: globaltask_worker
+    restart: always
+    depends_on:
+      - db
+      - redis
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres_password@db:5432/globaltask_fintech"
+      REDIS_URL: "redis://redis:6379"
+    command: npx tsx watch src/worker.ts
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: globaltask_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@globaltask.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+  prisma-studio:
+    build: .
+    container_name: globaltask_prisma_studio
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "5555:5555"
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres_password@db:5432/globaltask_fintech"
+    # Comando modificado para esperar y abrir navegador
+    command: >
+      sh -c "(sleep 10 && (open http://localhost:5555 || start http://localhost:5555 || xdg-open http://localhost:5555) &) 
+      && npx prisma studio --browser none"
+
+volumes:
+  postgres_data:
