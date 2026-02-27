@@ -18,13 +18,13 @@ Seguridad	JWT / Bcrypt	Manejo seguro de PII y autenticación robusta evitando ex
 
 Para levantar el ecosistema completo (API, Worker, DB, Redis, Frontend) desde cero:
 
-# 1. Levantar contenedores (Docker)
+1. Levantar contenedores (Docker)
 make run
 
-# 2. Inicializar esquema de base de datos e índices
+2. Inicializar esquema de base de datos e índices
 make migrate
 
-# 3. Cargar datos maestros (Países y Estados del 1 al 8)
+ 3. Cargar datos maestros (Países y Estados del 1 al 8)
 make seed
 
 
