@@ -2,7 +2,8 @@
 
 Este repositorio contiene una solución para la gestión de solicitudes de crédito multi-país, diseñada para manejar alta concurrencia, grandes volúmenes de datos y procesos asíncronos distribuidos.
 
-🛠️ Stack Tecnológico (Nivel Senior)
+🛠️ Stack Tecnológico 
+
 Categoría	Tecnología	Razón Técnica
 Framework Base	Next.js Unifica Frontend y API en un solo despliegue, facilitando la gestión de rutas y seguridad.
 Lenguaje	TypeScript	Garantiza la integridad de los datos en transacciones financieras y validaciones de PII.
@@ -12,6 +13,7 @@ Gestión de Colas	BullMQ	Solución robusta en Node.js para procesamiento asíncr
 Caché	Redis	Almacenamiento en memoria para resultados de riesgo y catálogos, optimizando el rendimiento.
 Tiempo Real	Socket.io	Comunicación bidireccional para actualizar la interfaz ante cambios de estado.
 Seguridad	JWT / Bcrypt	Manejo seguro de PII y autenticación robusta evitando exponer datos sensibles.
+
 🚀 Instalación y Ejecución (Quick Start)
 
 Para levantar el ecosistema completo (API, Worker, DB, Redis, Frontend) desde cero:
@@ -24,6 +26,9 @@ make migrate
 
 # 3. Cargar datos maestros (Países y Estados del 1 al 8)
 make seed
+
+
+
 🌐 Puertos y Acceso Local
 
 Frontend: http://localhost:3001
@@ -34,6 +39,7 @@ Prisma Studio: http://localhost:5555
  (Auditoría de DB en tiempo real)
 
 Redis: Puerto 6379
+
 
 🔄 Flujo de Estados por País
 
@@ -50,7 +56,9 @@ ID	Nombre de Usuario	Descripción del Proceso
 7	Crédito Aprobado	¡Felicidades! Tu crédito ha sido aprobado con éxito.
 8	No Aprobado	Lo sentimos, en este momento no podemos procesar tu solicitud.
 
+
 📈 Análisis de Escalabilidad (High Volume)
+
 1️⃣ Estrategia de Base de Datos
 
 Particionamiento:
@@ -84,6 +92,7 @@ Invalidación mediante eventos de cambio de estado.
 
 Limpieza selectiva de claves en Redis para asegurar consistencia.
 
+
 🛡️ Seguridad y Notas de Entrega
 🔐 Manejo de PII
 
@@ -97,6 +106,7 @@ Autenticación robusta basada en JWT.
 
 Hash seguro de contraseñas con Bcrypt.
 
+
 🏗️ Arquitectura
 
 Implementa principios de Clean Architecture.
@@ -107,6 +117,7 @@ Preparado para despliegue en Kubernetes.
 
 Manifiestos incluidos en /k8s.
 
+
 🌎 Multi-País
 
 Validaciones específicas por región.
@@ -115,7 +126,9 @@ Adaptación a normativas locales.
 
 Configuración extensible para nuevos países.
 
+
 📌 Objetivo del Proyecto
+
 
 Construir un motor de flujo de crédito:
 
