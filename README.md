@@ -35,7 +35,7 @@ make run
 make migrate
 ```
 
-## 3️⃣ Cargar datos maestros (Países y Estados del 1 al 8)
+## 3️⃣ Cargar datos maestros (reglas del motor decisiones y catalogo de estados)
 
 ```bash
 make seed
